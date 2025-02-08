@@ -12,8 +12,8 @@ class BuscadorTceSp:
         try:
             r = requests.get(self.URL_BUSCA, auth=('user', 'pass'))
             resposta = r.status_code
-            print(resposta)
-            import pdb; pdb.set_trace();
+            print(r.text)
+            # import pdb; pdb.set_trace();
         except Exception as e:
             print(f'Erro ao requisitar Jurisprudencia - Erro: {str(e)}')
 
