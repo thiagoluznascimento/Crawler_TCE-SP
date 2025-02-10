@@ -40,9 +40,10 @@ class BuscadorTceSp:
                 doc = {
                     "Doc" : cols[0].get_text(strip=True),
                     # "N_processo" : cols[1].get_text(strip=True).split()[0], (Estava pegando informações a mais)
-                    "N_processo": re.match(r'^\d{4,}/\d{3}/\d+', cols[1].get_text(strip=True)).group(0)
-                    if re.match(r'^\d{4,}/\d{3}/\d+', cols[1].get_text(strip=True))
-                    else cols[1].get_text(strip=True),
+                    # "N_processo": re.match(r'^\d{4,}/\d{3}/\d{2}', cols[1].get_text(strip=True)).group(0)
+                    # if re.match(r'^\d{4,}/\d{3}/\d+', cols[1].get_text(strip=True))
+                    # else cols[1].get_text(strip=True),
+                    "N_processo" : self._extrair_numero_processo(cols[1].get_text(strip=True)),
                     "Data_Atuação" : cols[2].get_text(strip=True),
                     "Partes" : [parte.strip() for parte in cols[3].get_text(strip=True).split(';')],
                     "Materia" : cols[4].get_text(strip=True),
@@ -50,6 +51,11 @@ class BuscadorTceSp:
                 }
                 documentos.append(doc)
         return documentos
+    
+    def _extrair_numero_processo(self, texto):
+        """Extrai número do processo do campo correspondente"""
+        match = re.match(r'^\d{4,}/\d{3}/\d{2}', texto)
+        return match.group(0) if match else texto
 
     def _obtem_total_pag(self, pagina_jurisprudencia):
         """Retorna o total de páginas da páginação"""
@@ -58,7 +64,6 @@ class BuscadorTceSp:
         # numeros_paginas = [int(pagina.get_text()) for pagina in paginas if pagina.get_text(strip=True).isdigit()]
         # total_paginas = max(numeros_paginas, default=0)
         total_paginas = max([int(pagina.get_text()) for pagina in paginas if pagina.get_text(strip=True).isdigit()])
-        # import pdb; pdb.set_trace()
         return total_paginas
     
 
