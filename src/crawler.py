@@ -10,13 +10,12 @@ class BuscadorTceSp:
     def __init__(self, busca):
         self.nome_busca = busca
         print(f'Buscando por {self.nome_busca}...')
-        # import pdb; pdb.set_trace()
 
     def baixa_docs(self):
         url_busca = f'{self.URL_BASE}?txtTdPalvs={self.nome_busca.replace(' ', '+')}&txtExp=&txtQqUma=&txtNenhPalvs=&txtNumIni=&txtNumFim=&tipoBuscaTxt=Documento&_tipoBuscaTxt=on&quantTrechos=1&processo=&exercicio=&dataAutuacaoInicio=&dataAutuacaoFim=&dataPubInicio=&dataPubFim=&_relator=1&_auditor=1&_materia=1&_tipoDocumento=1&acao=Executa'
         pagina_jurisprudencia = self._obtem_pag_jurisprudencia(url_busca)
-        # import pdb; pdb.set_trace();
         self._exatrai_dados_tabela(pagina_jurisprudencia)
+        total_paginas = self._obtem_total_pag(pagina_jurisprudencia)
 
 
     def _obtem_pag_jurisprudencia( self, url_busca):
@@ -51,5 +50,15 @@ class BuscadorTceSp:
                 }
                 documentos.append(doc)
         return documentos
+
+    def _obtem_total_pag(self, pagina_jurisprudencia):
+        """Retorna o total de páginas da páginação"""
+        soup = BeautifulSoup(pagina_jurisprudencia, 'html.parser')
+        paginas = soup.find_all('a', class_='page-link')
+        # numeros_paginas = [int(pagina.get_text()) for pagina in paginas if pagina.get_text(strip=True).isdigit()]
+        # total_paginas = max(numeros_paginas, default=0)
+        total_paginas = max([int(pagina.get_text()) for pagina in paginas if pagina.get_text(strip=True).isdigit()])
+        # import pdb; pdb.set_trace()
+        return total_paginas
     
 
