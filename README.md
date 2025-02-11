@@ -1,5 +1,5 @@
 # RPA TCE-SP
-Objetivo do desafio é desenvolver um robô de automação de processos utilizando Python. O robô será responsável por extrair todos os documentos do site do TCE-SP, que sejam relacionados a “fraude em escolas” salvar esses dados em um formato adequado (por exemplo, CSV, JSON). 
+Objetivo desse projeto é desenvolver um robô para automação de processos utilizando Python. O robô será responsável por extrair todos os documentos do site do TCE-SP, que sejam relacionados a “fraude em escolas” salvar esses dados em um formato adequado (por exemplo, CSV, JSON). 
 O site para raspagem de dados é https://www.tce.sp.gov.br/jurisprudencia/
 
 ## Preparação do ambiente de desenvolvimento  
