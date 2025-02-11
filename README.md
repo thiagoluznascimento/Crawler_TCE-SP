@@ -81,24 +81,6 @@ dados e manipulação de informações, utilizando essas ferramentas.
 O robô será responsável por extrair todos os documentos do site do TCE-SP, que sejam relacionados a “fraude em escolas” salvar esses dados em um formato adequado (por exemplo, CSV, JSON). 
 O site para raspagem de dados é https://www.tce.sp.gov.br/jurisprudencia/
 
-class BuscadorTceSp:
-
-    URL_BUSCA = "https://www.tce.sp.gov.br/jurisprudencia/"
-
-    def baixa_docs(self):
-        self._obtem_pag_jurisprudencia(self.URL_BUSCA)
-
-    def _obtem_pag_jurisprudencia( self, URL_BUSCA):
-        try:
-            r = requests.get(self.URL_BUSCA, auth=('user', 'pass'))
-            resposta = r.status_code
-            import pdb; pdb.set_trace();
-            print(resposta.text)
-        except Exception as e:    
-            print(f'Erro ao requisitar Jurisprudencia - Erro: {str(e)}')
-
-
-
 A imagem abaixo exibe uma sugestão de pesquisa
 
 ![pesquisa de jurisprudência](image.png)
