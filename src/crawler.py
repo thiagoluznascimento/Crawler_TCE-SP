@@ -1,9 +1,10 @@
 import re
 import os
 
+import logging
 import requests
 from bs4 import BeautifulSoup
-from pymongo import MongoClient
+from pymongo import MongoClient, errors
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -11,34 +12,41 @@ load_dotenv()
 MONGO_URL = os.getenv("MONGO_URL")
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 
-client = MongoClient(MONGO_URL)
-db = client[MONGO_DB_NAME]
-
-print(f"Conectado ao banco de dados: {MONGO_DB_NAME}")
+try:
+    client = MongoClient(MONGO_URL)
+    db = client[MONGO_DB_NAME]
+    client.server_info()
+    print(f"Conectado ao banco de dados: {MONGO_DB_NAME}")
+except errors.ServerSelectionTimeoutError as e:
+    raise ConnectionError(f"Erro ao conectar ao MongoDB: {str(e)}")
+except errors.ConnectionFailure as e:
+    raise ConnectionError(f"Falha na conexão com MongoDB: {str(e)}")
+except Exception as e:
+    raise RuntimeError(f"Erro inesperado: {str(e)}")
 
 collection = db.jurisprudencias
 
 
 class BuscadorTceSp:
+
     URL_BASE = "https://www.tce.sp.gov.br/jurisprudencia/pesquisar"
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
     def __init__(self, busca):
         self.nome_busca = busca
-        print(f"Buscando por {self.nome_busca}...")
+        logging.info(f"Buscando por {self.nome_busca}...")
 
     def baixa_docs(self):
         documentos = []
         offset = 0
         url_base_busca = f"{self.URL_BASE}?txtTdPalvs={self.nome_busca.replace(' ', '+')}&acao=Executa"
-
         # Obtem a página inicial para calcular o total de páginas
         pagina_jurisprudencia = self._obtem_pag_jurisprudencia(url_base_busca)
         total_paginas = self._obtem_total_pag(pagina_jurisprudencia)
-        print(f"Total de páginas encontradas: {total_paginas}")
-
-        # Percorre todas as páginas disponíveis
+        logging.info(f"Total de páginas encontradas: {total_paginas}")
+    
         for pagina in range(total_paginas):
-            print(f"Buscando página {pagina + 1} de {total_paginas}...")
+            logging.info(f"Buscando e extraindo informações da página {pagina + 1} de {total_paginas}")
             url_paginada = f"{url_base_busca}&offset={offset}"
             pagina_jurisprudencia = self._obtem_pag_jurisprudencia(url_paginada)
             documentos.extend(self._extrai_dados_tabela(pagina_jurisprudencia))
@@ -50,10 +58,9 @@ class BuscadorTceSp:
         """Faz requisição ao TCE-SP e retorna resultado HTML"""
         try:
             response = requests.get(url_busca)
-            response.raise_for_status()
             return response.text
         except requests.RequestException as e:
-            print(f"Erro ao requisitar Jurisprudência: {str(e)}")
+            logging.error(f"Erro ao requisitar Jurisprudência: {str(e)}")
             return ""
 
     def _extrai_dados_tabela(self, pagina_jurisprudencia):
@@ -106,6 +113,6 @@ class BuscadorTceSp:
         """Salva os dados extraídos no MongoAtlas"""
         if dados:
             collection.insert_many(dados)
-            print(f"{len(dados)} documentos inseridos no MongoDB com sucesso!")
+            logging.info(f"{len(dados)} documentos inseridos no MongoDB com sucesso!")
         else:
-            print("Nenhum documento encontrado para salvar.")
+            logging.info("Nenhum documento encontrado para salvar.")
