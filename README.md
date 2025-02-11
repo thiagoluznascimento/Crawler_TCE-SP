@@ -1,4 +1,74 @@
-# Desafio RPA(Robotic Process Automation) - TURIVIUS
+# RPA TCE-SP
+Objetivo do desafio é desenvolver um robô de automação de processos utilizando Python. O robô será responsável por extrair todos os documentos do site do TCE-SP, que sejam relacionados a “fraude em escolas” salvar esses dados em um formato adequado (por exemplo, CSV, JSON). 
+O site para raspagem de dados é https://www.tce.sp.gov.br/jurisprudencia/
+
+## Preparação do ambiente de desenvolvimento  
+Para executar o projeto, é necessário ter o **Python 3.12.3** instalado e seguir os passos abaixo:  
+
+1. Clonar o repositório:  
+   ```bash
+   git clone https://github.com/thiagoluznascimento/Crawler_TCE-SP.git
+   ```  
+
+2. Criar um ambiente virtual:  
+   ```bash
+   python3 -m venv venv
+   ```  
+
+3. Ativar o ambiente virtual:  
+   ```bash
+   source venv/bin/activate
+   ```  
+4. Instalar as dependências:  
+   ```bash
+   pip install -r requirements.txt
+   ```  
+---
+
+## Configuração do MongoDB Atlas  
+Para armazenar os dados no **MongoDB Atlas**, siga os passos abaixo:  
+
+1. Criar uma conta no [MongoDB Atlas](https://www.mongodb.com/atlas/database).  
+2. Criar um novo **cluster** e adicionar um usuário com permissões de leitura e escrita.  
+3. Obter a **string de conexão** no formato:  
+   ```
+   mongodb+srv://<usuário>:<senha>@<cluster>.mongodb.net/<database>?retryWrites=true&w=majority
+   ```  
+4. Criar um arquivo `.env` na raiz do projeto e configurar a variável `MONGO_URL` com sua string de conexão. Você pode usar o arquivo `.env.example` como referência:  
+   ```bash
+   cp .env.example .env
+   ```  
+5. Certifique-se de que seu cluster permite conexões da sua **IP whitelist**.  
+
+---
+
+## Como executar o programa  
+Para executar o projeto, utilize o seguinte comando:  
+
+```bash
+python3 run.py "fraude em escolas"
+```
+
+Os dados extraídos serão automaticamente armazenados no **MongoDB Atlas**.
+
+---
+
+## Considerações  
+Caso queira salvar localmente as informações raspadas, utilize a **branch `hotfix`**, que permite baixar os dados em um arquivo JSON diretamente para sua máquina.  
+
+1. Mudar para a branch `hotfix`:  
+   ```bash
+   git checkout hotfix
+   ```  
+
+2. Executar o projeto na branch `hotfix`:  
+   ```bash
+   python3 run.py "fraude em escolas"
+   ```
+
+---
+
+# Descrição do desafio RPA(Robotic Process Automation) - TURIVIUS
 
 Desafio a ser apresentado para a empresa Turivius
 
@@ -10,8 +80,6 @@ dados e manipulação de informações, utilizando essas ferramentas.
 ## Descrição do desafio
 O robô será responsável por extrair todos os documentos do site do TCE-SP, que sejam relacionados a “fraude em escolas” salvar esses dados em um formato adequado (por exemplo, CSV, JSON). 
 O site para raspagem de dados é https://www.tce.sp.gov.br/jurisprudencia/
-import requests
-from bs4 import BeautifulSoup
 
 class BuscadorTceSp:
 
@@ -72,4 +140,3 @@ conexão ou mudanças na estrutura do site.
 3. Testes de Software: Desenvolver testes funcionais e de unidade para garantir funcionalidades esperadas;
 4. SGBD orientados a Documento: Fazer o armazenamento das informações extraídas em algum dos seguintes banco
 de dados como Mongo, Dynamodb ou engines como Opensearch/Elastisearch.
-
