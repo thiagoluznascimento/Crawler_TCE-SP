@@ -14,10 +14,10 @@ class BuscadorTceSp:
 
     def baixa_docs(self):
         documentos = []
-        offset = 0  # Começa na primeira página
+        offset = 0
         url_base_busca = f"{self.URL_BASE}?txtTdPalvs={self.nome_busca.replace(' ', '+')}&acao=Executa"
 
-        # Obtém a página inicial para calcular o total de páginas
+        # Obtem a página inicial para calcular o total de páginas
         pagina_jurisprudencia = self._obtem_pag_jurisprudencia(url_base_busca)
         total_paginas = self._obtem_total_pag(pagina_jurisprudencia)
         print(f"Total de páginas encontradas: {total_paginas}")
