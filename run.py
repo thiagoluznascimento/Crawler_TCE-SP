@@ -1,4 +1,6 @@
+import sys
+
 from src.crawler import BuscadorTceSp
 
-crawler = BuscadorTceSp()
-crawler.baixa_docs()
+busca = sys.argv[1]
+BuscadorTceSp(busca).baixa_docs()
