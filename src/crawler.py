@@ -57,9 +57,8 @@ class BuscadorTceSp:
                     ),
                     "Data_Autuação": cols[2].get_text(strip=True),
                     "Partes": [
-                        cols[3].get_text(strip=True)
-                        + "; "
-                        + cols[4].get_text(strip=True)
+                        cols[3].get_text(strip=True),
+                        cols[4].get_text(strip=True),
                     ],
                     "Matéria": cols[5].get_text(strip=True),
                     "URL": cols[0].find("a")["href"] if cols[0].find("a") else "",
