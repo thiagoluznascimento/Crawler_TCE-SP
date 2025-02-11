@@ -1,8 +1,22 @@
-import json
 import re
+import os
 
 import requests
 from bs4 import BeautifulSoup
+from pymongo import MongoClient
+from dotenv import load_dotenv
+
+load_dotenv()
+
+MONGO_URL = os.getenv("MONGO_URL")
+MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
+
+client = MongoClient(MONGO_URL)
+db = client[MONGO_DB_NAME]
+
+print(f"Conectado ao banco de dados: {MONGO_DB_NAME}")
+
+collection = db.jurisprudencias
 
 
 class BuscadorTceSp:
@@ -30,7 +44,7 @@ class BuscadorTceSp:
             documentos.extend(self._extrai_dados_tabela(pagina_jurisprudencia))
             offset += 10  # Avança para a próxima página
 
-        self._salva_em_json(documentos, "dados_jurisprudencia.json")
+        self._salva_no_mongo(documentos)
 
     def _obtem_pag_jurisprudencia(self, url_busca):
         """Faz requisição ao TCE-SP e retorna resultado HTML"""
@@ -57,9 +71,8 @@ class BuscadorTceSp:
                     ),
                     "Data_Autuação": cols[2].get_text(strip=True),
                     "Partes": [
-                        cols[3].get_text(strip=True)
-                        + "; "
-                        + cols[4].get_text(strip=True)
+                        cols[3].get_text(strip=True),
+                        cols[4].get_text(strip=True),
                     ],
                     "Matéria": cols[5].get_text(strip=True),
                     "URL": cols[0].find("a")["href"] if cols[0].find("a") else "",
@@ -89,8 +102,10 @@ class BuscadorTceSp:
         total_paginas = (max_offset // 10) + 1
         return total_paginas
 
-    def _salva_em_json(self, dados, nome_arquivo):
-        """Salva os dados extraídos em um arquivo JSON"""
-        with open(nome_arquivo, "w", encoding="utf-8") as f:
-            json.dump(dados, f, ensure_ascii=False, indent=4)
-        print(f"Dados salvos em {nome_arquivo}")
+    def _salva_no_mongo(self, dados):
+        """Salva os dados extraídos no MongoAtlas"""
+        if dados:
+            collection.insert_many(dados)
+            print(f"{len(dados)} documentos inseridos no MongoDB com sucesso!")
+        else:
+            print("Nenhum documento encontrado para salvar.")
