@@ -51,6 +51,7 @@ class BuscadorTceSp:
             pagina_jurisprudencia = self._obtem_pag_jurisprudencia(url_paginada)
             documentos.extend(self._extrai_dados_tabela(pagina_jurisprudencia))
             offset += 10  # Avança para a próxima página
+            # breakpoint()
 
         self._salva_no_mongo(documentos)
 

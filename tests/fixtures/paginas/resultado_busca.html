@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pesquisa de Jurisprud&ecirc;ncia</title>
+    <meta name="layout" content="main" />
+
+    <script src="/jurisprudencia/res/js/jquery-3.1.0.min.js"/></script>
+    <script src="/jurisprudencia/res/js/jquery-ui.min.js"/></script>
+    <script src="/jurisprudencia/res/js/jquery-datePicker-pt-BR.js"/></script>
+    <script src="/jurisprudencia/res/js/jquery.mask.min.js"/></script>
+    <link href="/jurisprudencia/res/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/jurisprudencia/res/css/main.css" rel="stylesheet">
+    <link href="/jurisprudencia/res/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/jurisprudencia/res/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/jurisprudencia/res/css/jquery-ui.min.css" rel="stylesheet">
+    <link href="/jurisprudencia/res/img/favicon.ico" rel="icon">
+    <script src="/jurisprudencia/res/iframe-resizer-master/js/iframeResizer.contentWindow.min.js"/></script>
+
+    <!-- Componentes JS externos -->
+    <link href="/jurisprudencia/res/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/jurisprudencia/res/select2-4.0.5/css/select2.min.css" rel="stylesheet">
+    <script src="/jurisprudencia/res/select2-4.0.5/js/select2.min.js"></script>
+
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+
+	<style>
+
+
+        a:visited {
+            color: rgb(170,43,43);
+        }
+
+        .alinhamento{
+            vertical-align: middle !important;
+        }
+
+        tbody:before {
+            content: "-";
+            display: block;
+            line-height: 1em;
+            color: transparent;
+        }
+
+        .nopadding {
+            //padding: 0px !important;
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+            margin: 0px !important;
+            margin-top: 0px !important;
+            margin-left: 0px !important;
+            margin-bottom: 0px !important;
+        }
+
+        .borda-superior{
+            background: #f5f5f5;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .borda-cabecalho  th{
+            border-top: 1px solid #777 !important;
+            border-bottom: 1px solid #777 !important;
+        }
+
+        .link-cabecalho {
+            color:#333 !important;
+            font-size: 85%;
+            font-weight: bold;
+        }
+
+        .texto-resultado-busca{
+            background: #ffffdb;
+            padding: 2px 4px;
+            border: 1px solid #ccccaa;
+        }
+
+        .label-texto {
+            display: inline-block;
+            max-width: 100%;
+            /* margin-bottom: 5px; */
+            font-weight: 700;
+        }
+
+        .table-docs {
+            border-collapse: collapse;
+        }
+
+        .titulo-tabela {
+            background-color: #ddd;
+        }
+
+        .titulo-tabela {
+            background-color: #ddd;
+        }
+
+        .titulo-trechos {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .small .sem-borda {
+            padding: 10px 10px 10px 50px;
+        }
+
+        .trechos-documento {
+            margin: 10px 0px 30px 0px !important;
+            list-style: none;
+            padding-left: 0px;
+        }
+
+        ul.trechos-documento li {
+            text-align: justify;
+            margin-bottom: 10px;
+            border: 1px solid #eee;
+            background: #fafafa;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .largura{
+            width: 100%;
+            padding
+        }
+
+        .largura-label{
+            width: 0%;
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .date {
+            width: 250px;
+        }
+
+        .comboNumber {
+            width: 100px;
+        }
+
+        .date_50p {
+            width: 100%;
+        }
+
+        .margemCheckbox {
+            margin: 10px 5px 2px 40px !important;
+        }
+
+        .checkbox-ajuste-horizontal {
+            margin-left: -40px;
+        }
+
+	</style>
+	
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+  </head>
+
+  <body class="nopadding largura">
+
+<!-- INICIO Parte do Cabeçalho TCESP-->
+
+
+
+        
+
+        <div class="navbar-form container" style="margin-left: 0px">
+
+        <script>
+
+            function submitFiltroPesqRapida(formulario){
+                document.getElementById("acao").value = "Executa";
+                document.getElementById("buscaRapida").value = "true";
+                document.getElementById("ignorarEntrada").value = "false";
+                return true;
+            }
+
+            function submitFiltroAvancada(){
+                document.getElementById("acao").value = "Pesquisar";
+                document.getElementById("buscaRapida").value = "false";
+                document.getElementById("ignorarEntrada").value = "true";
+                return true;
+            }
+
+        </script>
+
+        <form id="filtro" name="filtro" action="pesquisar" method="get">
+
+                <!-- Grupo Todas Palavras -->
+                <div class="pull-left row">
+
+                    <label class="control-label" style="" >Buscar por palavras:</label>
+                    <input type="text" name="txtTdPalvs" value='fraude em escolas'  class="form-control" maxlength="1024" placeHolder="Exemplo: Merenda Escolar fraude" style="margin-right: 25px" />
+
+                    <label class="control-label " style="">N&deg; Processo:</label>
+                    <input type="text" name="processo" id="processo" value=""  class="form-control" maxlength="15" placeHolder="Exemplo: 1023/026/17 " style="margin-right: 25px"/>
+
+                    <input type="hidden" id="acao" name="acao" value="Executa">
+                    <input type="hidden" id="buscaRapida" name="buscaRapida" value="true">
+                    <input type="hidden" id="ignorarEntrada" name="ignorarEntrada" value="false">
+
+                    <input type="submit" value="Pesquisa R&aacute;pida"  class="btn btn-info" onclick="submitFiltroPesqRapida(this)"/>
+                    <input type="submit" value="<< Pesquisa Avan&ccedil;ada"  class="btn btn-info"onclick="submitFiltroAvancada(this)"/>
+
+            <script>
+                $( function() {
+                    $('#processo').mask('######/###/##', {reverse: true});
+                } );
+            </script>
+
+                </div>
+        </form>
+</div>
+
+<div style="clear: both"></div>
+
+
+        
+            <div class="page-header largura">
+                <h3 class="nopadding">Foram encontrados 1374 registros</h3>
+            </div>
+        
+
+        </br>
+
+        
+
+        
+        <div class="text-center alert alert-warning largura" role="alert">
+    <h5>O resultado aqui apresentado possui car&aacute;ter meramente informativo, n&atilde;o se prestando para contagem de quaisquer prazos processuais.</h5>
+</div>
+
+        
+
+        <!--
+        <form action="pesquisar" class="form-group">
+            <div class="col-md-5">
+                <input type="submit" value="<< Pesquisa Avançada" class="btn btn-info"/>
+                <input type="hidden" name="acao" value="Pesquisar">
+            </div>
+        </form> -->
+
+
+        
+
+            <table class="table largura table-docs">
+
+                <thead class="titulo-tabela borda-cabecalho">
+                    <tr >
+                        <th width="8%" class=" alinhamento">
+                            
+                                <a class="link-cabecalho" href=
+                                        /jurisprudencia/pesquisar?acao=Executa&offset=0&campoPulsaOrdem=0 >
+                                Doc.<span class="fa fa-sort"></span> </a>
+                            
+                            
+                        </th>
+
+                        <th width="9%" class=" alinhamento">
+                            
+                                <a class="link-cabecalho" href=
+                                    /jurisprudencia/pesquisar?acao=Executa&offset=0&campoPulsaOrdem=1 >
+                                N&deg; Proc.<span class="fa fa-sort"></span></a>
+                            
+                            
+                        </th>
+
+                        <th width="10%" class=" alinhamento">
+                            
+                                <a class="link-cabecalho" href=
+                                    /jurisprudencia/pesquisar?acao=Executa&offset=0&campoPulsaOrdem=2 >
+                                Autuação<span class="fa fa-sort"></span></a>
+                            
+                            
+                        </th>
+                        <th width="15%" class=" alinhamento">
+                            
+                                <a class="link-cabecalho" href=
+                                    /jurisprudencia/pesquisar?acao=Executa&offset=0&campoPulsaOrdem=3 >
+                                Parte 1<span class="fa fa-sort"></span></a>
+                            
+                            
+                        </th>
+                        <th width="15%"class=" alinhamento">
+
+                            
+                                <a class="link-cabecalho" href=
+                                    /jurisprudencia/pesquisar?acao=Executa&offset=0&campoPulsaOrdem=4 >
+                                Parte 2<span class="fa fa-sort"></span></a>
+                            
+                            
+                        </th>
+
+                        <th width="15%" class=" alinhamento">
+                            
+                                <a class="link-cabecalho" href=
+                                    /jurisprudencia/pesquisar?acao=Executa&offset=0&campoPulsaOrdem=5 >
+                                Matéria<span class="fa fa-sort"></span></a>
+                            
+                            
+                        </th>
+
+                        <th width="19%" class=" alinhamento">
+                            
+                                <a class="link-cabecalho" href=
+                                    /jurisprudencia/pesquisar?acao=Executa&offset=0&campoPulsaOrdem=6 >
+                            Objeto<span class="fa fa-sort"></span></a>
+                            
+                            
+                        </th>
+
+                        <th class="alinhamento">
+                            
+                                <a class="link-cabecalho" href=
+                                    /jurisprudencia/pesquisar?acao=Executa&offset=0&campoPulsaOrdem=7 >
+                                Exercício<span class="fa fa-sort"></span></a>
+                            
+                            
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    
+
+                        <tr class="borda-superior">
+                            <td class="small ">
+                                <a href='https://jurisprudencia.tce.sp.gov.br/arqs_juri/pdf/465588.pdf' target="_blank">
+                                    Sentença (publicação na íntegra)
+                                </a>
+                            </td>
+                            <td class="small "><a href="exibir?proc=9758/026/09&offset=0" >9758/026/09</a>
+                            <td class="small ">04/03/2009 </td>
+                            <td class="small ">PREFEITURA MUNICIPAL DE ITA... </td>
+                            <td class="small ">APM/EM NOEMIA SALLES PADOVAN </td>
+                            <td class="small ">PREST.CONTAS-REP.TERC.SETOR-CG/TP/CV/TC/TF-VLR.INF </td>
+                            <td class="small "> </td>
+                            <td class="small">2007 </td>
+                        </tr>
+
+                        
+                            <tr><td  colspan=8>
+                                <div class="titulo-trechos">Trechos localizados no documento: </div>
+                                <ul class="trechos-documento">
+                                    
+                                        <li>
+                                            ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Memo nº 04/003
+
+
+TC- 9758/026/09 
+
+Fl. 246 
+ 
+
+ 
+
+ 
+
+ 
+
+TRIBUNAL DE CONTAS DO ESTADO DE SÃO PAULO 
+ 
+
+CORPO DE AUDITORES 
+
+ 
+
+ 
+
+SSEENNTTEENNÇÇAA  DDAA  AAUUDDIITTOORRAA  SSIILLVVIIAA  MMOONNTTEEIIRROO  
+
+PROCESSO:  TC-009758/026/09 
+
+ÓRGÃO CONCESSOR: Prefeitura Municipal de Itanhaém 
+
+RESPONSÁVEL:   João Carlos Forssel Neto – Ex-Prefeito 
+
+BENEFICIARIA:  APM  da <span class="texto-resultado-busca">Escola</span> Municipal Noemia Salles Padovan 
+
+RESPONSÁVEL:  Maria Bernadete Fadel Garcia Pinto 
+
+ASSUNTO:   Repasses ao Terceiro Setor – Subvenção 
+
+VALOR:  R$ 136.900,00 
+
+EXERCÍCIO:  2007 
+
+ADVOGADO:  Ana Lúcia Pereira da Silva Oliveira – OAB/SP nº 155.833 
+
+INSTRUÇÃO:  UR-20 Unidade Regional...
+                                        </li>
+                                    
+                                </ul>
+                            </td></tr>
+                        
+
+                    
+
+                        <tr class="borda-superior">
+                            <td class="small ">
+                                <a href='https://jurisprudencia.tce.sp.gov.br/arqs_juri/pdf/912128.pdf' target="_blank">
+                                    Relatório / Voto
+                                </a>
+                            </td>
+                            <td class="small "><a href="exibir?proc=15755/989/22&offset=0" >15755/989/22</a>
+                            <td class="small ">15/07/2022 </td>
+                            <td class="small ">FUNDACAO PARA O DESENVOLVIM... </td>
+                            <td class="small "> </td>
+                            <td class="small ">RECURSO ORDINARIO </td>
+                            <td class="small ">Recurso ordinário interposto contra o v. A... </td>
+                            <td class="small">2013 </td>
+                        </tr>
+
+                        
+                            <tr><td  colspan=8>
+                                <div class="titulo-trechos">Trechos localizados no documento: </div>
+                                <ul class="trechos-documento">
+                                    
+                                        <li>
+                                            ... do Estado de São 
+
+Paulo (TC-14497.989.17-8. Sessão de 7/6/22, Relator o eminente Conselheiro 
+
+Sidney Estanislau Beraldo). 
+
+
+
+ 
+
+ 2 
+
+Em suma, a E. Primeira Câmara fundamentou o juízo 
+
+desfavorável na negligência do Órgão Concessor na sua obrigação de efetiva 
+
+conferência dos documentos encaminhados na Prestação de Contas. 
+
+Isso porque a FDE teria emitido Parecer Conclusivo atestando a 
+
+regularidade da integralidade dos gastos efetuados, só tendo tomado 
+
+providências após a veiculação de notícia pela imprensa acerca da prisão do 
+
+Presidente da FEF, por ocasião da “Operação Bolsa Fantasma”, deflagrada 
+
+pela Polícia Federal em razão da constatação de <span class="texto-resultado-busca">fraudes</span> no Programa <span class="texto-resultado-busca">Escola</span> 
+
+da Família...
+                                        </li>
+                                    
+                                </ul>
+                            </td></tr>
+                        
+
+                    
+
+                        <tr class="borda-superior">
+                            <td class="small ">
+                                <a href='https://jurisprudencia.tce.sp.gov.br/arqs_juri/pdf/902816.pdf' target="_blank">
+                                    Sentença (publicação na íntegra)
+                                </a>
+                            </td>
+                            <td class="small "><a href="exibir?proc=15485/989/17&offset=0" >15485/989/17</a>
+                            <td class="small ">27/09/2017 </td>
+                            <td class="small ">PREFEITURA MUNICIPAL DE BEB... </td>
+                            <td class="small "> </td>
+                            <td class="small ">ADMISSAO DE PESSOAL - CONCURSO  PROCESSO SELETIVO </td>
+                            <td class="small ">INTERESSADOS: Rosineide de Andrade Rocha e... </td>
+                            <td class="small">2015 </td>
+                        </tr>
+
+                        
+                            <tr><td  colspan=8>
+                                <div class="titulo-trechos">Trechos localizados no documento: </div>
+                                <ul class="trechos-documento">
+                                    
+                                        <li>
+                                            ... nº 01/2014
+(Planilhas 9.2 e 9.3).
+
+Inicialmente, a Fiscalização (9.6) entendeu que os atos em exame
+estavam em condição de receber registro nesta Corte; no entanto anotou que a
+empresa organizadora do Concurso (Persona Capacitação, Assessoria e Consultoria Eireli)
+estava sob investigação do GAECO.
+
+Notificada, a Prefeitura (26.1) enfatizou o relatório da Fiscalização que
+indicou a boa ordem dos atos de admissão e alegou desconhecer quaisquer fatos
+ilícitos envolvendo a empresa de realização do concurso.
+
+Conveio ao MPC (17.1 e 31.1) propor questionamento ao Ministério
+Público Estadual sobre a existência de indícios e/ou provas de <span class="texto-resultado-busca">fraude</span> neste
+concurso público cujos atos de admissão...
+                                        </li>
+                                    
+                                </ul>
+                            </td></tr>
+                        
+
+                    
+
+                        <tr class="borda-superior">
+                            <td class="small ">
+                                <a href='https://jurisprudencia.tce.sp.gov.br/arqs_juri/pdf/20008081.pdf' target="_blank">
+                                    Despacho
+                                </a>
+                            </td>
+                            <td class="small "><a href="exibir?proc=7279/989/24&offset=0" >7279/989/24</a>
+                            <td class="small ">26/02/2024 </td>
+                            <td class="small ">FRANCISCO ALVES DA SILVA </td>
+                            <td class="small ">PREFEITURA MUNICIPAL DE AGU... </td>
+                            <td class="small ">ENCAMINHA DOCUMENTO </td>
+                            <td class="small ">Denúncia referente à fraude de dispensa de... </td>
+                            <td class="small">2023 </td>
+                        </tr>
+
+                        
+                            <tr><td  colspan=8>
+                                <div class="titulo-trechos">Trechos localizados no documento: </div>
+                                <ul class="trechos-documento">
+                                    
+                                        <li>
+                                            ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GABINETE DO 
+CONSELHEIRO
+
+ROBSON MARINHO
+(11) 3292-3521 - gcrrm@tce.sp.gov.br
+
+D E S P A C H O
+
+ 
+
+PROCESSO: 00007279.989.24-8
+
+REQUERENTE
+/SOLICITANTE:
+
+FRANCISCO ALVES DA SILVA (CPF ***.
+326.188-**)
+
+ADVOGADO: ANDRESSA FRANCIELI
+GONCALVES DE SOUZA (OAB/SP
+412.667)
+
+MENCIONADO(A): PREFEITURA MUNICIPAL DE AGUAS DA
+PRATA (CNPJ 44.831.733/0001-43)
+
+ASSUNTO: Denúncia referente à <span class="texto-resultado-busca">fraude</span> de dispensa de
+licitação, para CONTRATAÇÃO DE EMPRESA
+PARA EXECUÇÃO DE SERVIÇOS DE
+REGULARIZAÇÃO DE PISO NA <span class="texto-resultado-busca">ESCOLA</span>
+FELIPE URTADO NO DISTRITO DE SÃO
+ROQUE DA FARTURA, na Prefeitura de Águas
+da Prata. Inclui contratado pré-definido, início da
+obra antes do contrato, empenho...
+                                        </li>
+                                    
+                                </ul>
+                            </td></tr>
+                        
+
+                    
+
+                        <tr class="borda-superior">
+                            <td class="small ">
+                                <a href='https://jurisprudencia.tce.sp.gov.br/arqs_juri/pdf/110417.pdf' target="_blank">
+                                    Despacho
+                                </a>
+                            </td>
+                            <td class="small "><a href="exibir?proc=35227/026/10&offset=0" >35227/026/10</a>
+                            <td class="small ">04/10/2010 </td>
+                            <td class="small ">CAMARA MUNICIPAL DE BARRA D... </td>
+                            <td class="small ">CLAUDINEI MACIEL DOS SANTOS </td>
+                            <td class="small ">ENCAMINHA DOCUMENTO </td>
+                            <td class="small ">COPIA EXP. TC-486/012/10 TC-800072/026/08 ... </td>
+                            <td class="small">2010 </td>
+                        </tr>
+
+                        
+                            <tr><td  colspan=8>
+                                <div class="titulo-trechos">Trechos localizados no documento: </div>
+                                <ul class="trechos-documento">
+                                    
+                                        <li>
+                                            ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Microsoft Word - Ambiente3110417.doc
+
+
+ 
+ 
+ 
+
+TRIBUNAL DE CONTAS DO ESTADO DE SÃO PAULO 
+
+PROCESSO: TC-035227/026/10 
+INTERESSADO: CLAUDINEI MACIEL DOS SANTOS – PRESIDENTE DA 
+CÂMARA MUNICIPAL DE BARRA DO TURVO 
+ASSUNTO: COMUNICA POSSÍVEIS IRREGULARIDADES PRATICADAS PELA 
+PREFEITURA MUNICIPAL DE BARRA DO TURVO 
+ 
+   Visto. 
+
+ 
+Os autos tratam de denúncia formulada pelo 
+
+Vereador Claudinei Maciel dos Santos, que versam sobre 
+supostas irregularidades em licitações, aplicação de 
+recursos públicos recebidos para a educação e <span class="texto-resultado-busca">fraude</span> à 
+Súmula Vinculante nº 13 do STF, abrangendo os exercícios de 
+2008, 2009 e 2010. 
+
+ 
+Dentre os atos praticados...
+                                        </li>
+                                    
+                                </ul>
+                            </td></tr>
+                        
+
+                    
+
+                        <tr class="borda-superior">
+                            <td class="small ">
+                                <a href='https://jurisprudencia.tce.sp.gov.br/arqs_juri/pdf/476192.pdf' target="_blank">
+                                    Despacho
+                                </a>
+                            </td>
+                            <td class="small "><a href="exibir?proc=22370/026/11&offset=0" >22370/026/11</a>
+                            <td class="small ">01/07/2011 </td>
+                            <td class="small ">TRES S & CAMPOS CONFECCOES ... </td>
+                            <td class="small ">PREFEITURA MUNICIPAL DE BER... </td>
+                            <td class="small ">REPRESENTACAO </td>
+                            <td class="small ">PREGAO PRESENCIAL 23/2011 PARA AQUISICAO D... </td>
+                            <td class="small">2011 </td>
+                        </tr>
+
+                        
+                            <tr><td  colspan=8>
+                                <div class="titulo-trechos">Trechos localizados no documento: </div>
+                                <ul class="trechos-documento">
+                                    
+                                        <li>
+                                            ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+fl
+
+
+PROCESSO:  TC-034740/026/11. 
+ 
+CONTRATANTE:  PREFEITURA MUNICIPAL DE BERTIOGA. 
+ 
+CONTRATADA:  J. EDUC FABRIL LTDA.  
+ 
+OBJETO:  REGISTRO DE PREÇOS PARA AQUISIÇÃO DE KITS DE 
+
+UNIFORMES ESCOLARES (<span class="texto-resultado-busca">ESCOLAS</span> MUNICIPAIS) E 
+ATENDIMENTO À SECRETARIA DE EDUCAÇÃO E 
+DESENVOLVIMENTO CULTURAL DA PREFEITURA DO MUNICÍPIO 
+DE BERTIOGA. 
+
+ 
+EM EXAME:       PREGÃO PRESENCIAL N.º 023/2011 E CONTRATO DA ATA DE 
+
+REGISTRO DE PREÇOS N.º 003/2011. 
+ 
+
+  
+ADVOGADOS:  RAFAEL RODRIGO DE OLIVEIRA – OAB/SP 263.565, ANTÔNIO 
+
+SERGIO BAPTISTA – OAB/SP 17.111 E OUTROS. 
+
+   
+ Vistos. 
+
+ 
+                               Em consulta a rede mundial de computadores, que ora anexo...
+                                        </li>
+                                    
+                                </ul>
+                            </td></tr>
+                        
+
+                    
+
+                        <tr class="borda-superior">
+                            <td class="small ">
+                                <a href='https://jurisprudencia.tce.sp.gov.br/arqs_juri/pdf/476192.pdf' target="_blank">
+                                    Despacho
+                                </a>
+                            </td>
+                            <td class="small "><a href="exibir?proc=34740/026/11&offset=0" >34740/026/11</a>
+                            <td class="small ">20/10/2011 </td>
+                            <td class="small ">PREFEITURA MUNICIPAL DE BER... </td>
+                            <td class="small ">J EDUC FABRIL LTDA </td>
+                            <td class="small ">CONTRATO </td>
+                            <td class="small ">REGISTRO DE PRECOS PARA AQUISICAO DE KITS ... </td>
+                            <td class="small">2011 </td>
+                        </tr>
+
+                        
+                            <tr><td  colspan=8>
+                                <div class="titulo-trechos">Trechos localizados no documento: </div>
+                                <ul class="trechos-documento">
+                                    
+                                        <li>
+                                            ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+fl
+
+
+PROCESSO:  TC-034740/026/11. 
+ 
+CONTRATANTE:  PREFEITURA MUNICIPAL DE BERTIOGA. 
+ 
+CONTRATADA:  J. EDUC FABRIL LTDA.  
+ 
+OBJETO:  REGISTRO DE PREÇOS PARA AQUISIÇÃO DE KITS DE 
+
+UNIFORMES ESCOLARES (<span class="texto-resultado-busca">ESCOLAS</span> MUNICIPAIS) E 
+ATENDIMENTO À SECRETARIA DE EDUCAÇÃO E 
+DESENVOLVIMENTO CULTURAL DA PREFEITURA DO MUNICÍPIO 
+DE BERTIOGA. 
+
+ 
+EM EXAME:       PREGÃO PRESENCIAL N.º 023/2011 E CONTRATO DA ATA DE 
+
+REGISTRO DE PREÇOS N.º 003/2011. 
+ 
+
+  
+ADVOGADOS:  RAFAEL RODRIGO DE OLIVEIRA – OAB/SP 263.565, ANTÔNIO 
+
+SERGIO BAPTISTA – OAB/SP 17.111 E OUTROS. 
+
+   
+ Vistos. 
+
+ 
+                               Em consulta a rede mundial de computadores, que ora anexo...
+                                        </li>
+                                    
+                                </ul>
+                            </td></tr>
+                        
+
+                    
+
+                        <tr class="borda-superior">
+                            <td class="small ">
+                                <a href='https://jurisprudencia.tce.sp.gov.br/arqs_juri/pdf/946237.pdf' target="_blank">
+                                    Relatório / Voto
+                                </a>
+                            </td>
+                            <td class="small "><a href="exibir?proc=4619/989/22&offset=0" >4619/989/22</a>
+                            <td class="small ">04/02/2022 </td>
+                            <td class="small "> </td>
+                            <td class="small ">CAMARA MUNICIPAL DE PARISI </td>
+                            <td class="small ">CONTAS DE CAMARA MUNICIPAL </td>
+                            <td class="small ">Contas de Câmara - Exercício de 2022 </td>
+                            <td class="small">2022 </td>
+                        </tr>
+
+                        
+                            <tr><td  colspan=8>
+                                <div class="titulo-trechos">Trechos localizados no documento: </div>
+                                <ul class="trechos-documento">
+                                    
+                                        <li>
+                                            ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+   
+
+ 
+
+ 
+
+ 
+
+GABINETE DO CONSELHEIRO 
+
+DIMAS RAMALHO 
+(11) 3292-3235 - gcder@tce.sp.gov.br 
+
+ 
+
+ 
+1 
+
+ 
+
+PRIMEIRA CÂMARA – SESSÃO: 20/02/2024 
+ 
+ 
+ 
+ 
+
+73 TC-004619.989.22-1 
+
+Câmara Municipal: Parisi. 
+Exercício: 2022. 
+
+Presidente: Genésio Francisco dos Santos. 
+Advogado(s): Bruna Parizi Yoshimoto (OAB/SP nº 313.667). 
+Procurador(es) de Contas: Rafael Antonio Baldo. 
+
+Fiscalizada por: UR-11. 
+Fiscalização atual: UR-11. 
+
+ 
+ 
+(GCDER-25) 
+
+ 
+
+EMENTA: CONTAS ANUAIS. CÂMARA MUNICIPAL. OBSERVOU 
+OS LIMITES CONSTITUCIONAIS E DA LRF. FALHAS RELATIVAS 
+AO PLANEJAMENTO, CONTROLE INTERNO, REPASSES, 
+
+<span class="texto-resultado-busca">FRAUDE</span> BANCÁRIA, FÉRIAS, RECOMENDAÇÕES E 
+PROVIDÊNCIAS...
+                                        </li>
+                                    
+                                </ul>
+                            </td></tr>
+                        
+
+                    
+
+                        <tr class="borda-superior">
+                            <td class="small ">
+                                <a href='https://jurisprudencia.tce.sp.gov.br/arqs_juri/pdf/791123.pdf' target="_blank">
+                                    Relatório / Voto
+                                </a>
+                            </td>
+                            <td class="small "><a href="exibir?proc=4362/989/18&offset=0" >4362/989/18</a>
+                            <td class="small ">03/02/2018 </td>
+                            <td class="small "> </td>
+                            <td class="small ">PREFEITURA MUNICIPAL DE VAR... </td>
+                            <td class="small ">CONTAS MUNICIPAIS </td>
+                            <td class="small ">Contas de Prefeitura - Exercício de 2018 </td>
+                            <td class="small">2018 </td>
+                        </tr>
+
+                        
+                            <tr><td  colspan=8>
+                                <div class="titulo-trechos">Trechos localizados no documento: </div>
+                                <ul class="trechos-documento">
+                                    
+                                        <li>
+                                            ...; 
+
+
+
+ 
+
+ 
+
+3 
+
+ 
+
+TRIBUNAL DE CONTAS DO ESTADO DE SÃO PAULO 
+GABINETE DO CONSELHEIRO ROBSON MARINHO 
+
+- menos de 25% dos alunos de pré-<span class="texto-resultado-busca">escola</span> e dos Anos Iniciais concluíram o ano letivo 
+em período integral; 
+- classes dos Anos Iniciais do Ensino Fundamental com mais de 24 alunos por turma, 
+contrariando recomendação do Conselho Nacional de Educação; 
+- falta de biblioteca ou sala de leitura em parte das <span class="texto-resultado-busca">escolas</span>; 
+- parcela dos estabelecimentos de ensino da rede pública municipal não possuíam Auto 
+de Vistoria do Corpo de Bombeiros vigente; 
+- existência de unidades de ensino que necessitavam de reparos (conserto de janelas, 
+rachaduras, infiltrações, fiação elétrica, substituição de azulejos...
+                                        </li>
+                                    
+                                </ul>
+                            </td></tr>
+                        
+
+                    
+
+                        <tr class="borda-superior">
+                            <td class="small ">
+                                <a href='https://jurisprudencia.tce.sp.gov.br/arqs_juri/pdf/217779.pdf' target="_blank">
+                                    Sentença (publicação na íntegra)
+                                </a>
+                            </td>
+                            <td class="small "><a href="exibir?proc=553/009/08&offset=0" >553/009/08</a>
+                            <td class="small ">05/03/2008 </td>
+                            <td class="small ">PREFEITURA MUNICIPAL DE NOV... </td>
+                            <td class="small ">ENGECON ITAPEVA ENG COM TRA... </td>
+                            <td class="small ">CONTRATO </td>
+                            <td class="small ">REFORMA DA ESCOLA RICARDO CAMPOLIM DE ALME... </td>
+                            <td class="small">2005 </td>
+                        </tr>
+
+                        
+                            <tr><td  colspan=8>
+                                <div class="titulo-trechos">Trechos localizados no documento: </div>
+                                <ul class="trechos-documento">
+                                    
+                                        <li>
+                                            ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+ 
+ 
+247 Fls. n.º  
+
+Proc. TC-000553/009/08 
+..................... 
+
+TRIBUNAL DE CONTAS DO ESTADO 
+GABINETE DO CONSELHEIRO  
+EDGARD CAMARGO RODRIGUES 
+
+PROCESSO: TC-000553/009/08 
+
+Contratante: Prefeitura Municipal de Nova Campina 
+
+Responsáveis: Alaise Ida Campos Morais Vasconcelos – 
+
+Prefeita à época. 
+
+ Eliel Cardoso Santiago – Diretor Municipal de 
+
+Obras, Serviços e Meio Ambiente à época. 
+
+Contratada: Engecon Itapeva – Engenharia Comércio e 
+
+Transportes Ltda. – ME 
+
+Objeto: Serviços de reforma da <span class="texto-resultado-busca">Escola</span> Ricardo 
+
+Campolim de Almeida, no Distrito de Itaóca. 
+
+Em exame: Convite nº 25/05, Contrato s/nº de 13/10/05 e 
+
+Termo de Recebimento...
+                                        </li>
+                                    
+                                </ul>
+                            </td></tr>
+                        
+
+                    
+
+                    
+                        <tr class="borda-superior">
+                            <td class="small " colspan="8"></td>
+                        </tr>
+                    
+
+                </tbody>
+            </table>
+
+            <!-- barra de paginação -->
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm">
+
+                    
+
+                    <!-- Offset 0 não aparece o anterior-->
+                    
+
+                    
+
+                    
+
+                        
+
+                        
+                            
+                                <li class="page-item active">
+                                    <span class="page-link">
+                                        1
+                                        <span class="sr-only">(current)</span>
+                                    </span>
+                                </li>
+                            
+                            
+                        
+                    
+
+                        
+
+                        
+                            
+                            
+                                <li class="page-item">
+                                    <a class="page-link " href='/jurisprudencia/pesquisar?acao=Executa&amp;offset=10'>
+                                        2
+                                    </a>
+                                </li>
+                            
+                        
+                    
+
+                        
+
+                        
+                            
+                            
+                                <li class="page-item">
+                                    <a class="page-link " href='/jurisprudencia/pesquisar?acao=Executa&amp;offset=20'>
+                                        3
+                                    </a>
+                                </li>
+                            
+                        
+                    
+
+                        
+
+                        
+                            
+                            
+                                <li class="page-item">
+                                    <a class="page-link " href='/jurisprudencia/pesquisar?acao=Executa&amp;offset=30'>
+                                        4
+                                    </a>
+                                </li>
+                            
+                        
+                    
+
+                        
+
+                        
+                            
+                            
+                                <li class="page-item">
+                                    <a class="page-link " href='/jurisprudencia/pesquisar?acao=Executa&amp;offset=40'>
+                                        5
+                                    </a>
+                                </li>
+                            
+                        
+                    
+
+                        
+
+                        
+                            
+                            
+                                <li class="page-item">
+                                    <a class="page-link " href='/jurisprudencia/pesquisar?acao=Executa&amp;offset=50'>
+                                        6
+                                    </a>
+                                </li>
+                            
+                        
+                    
+
+                    
+                        <li class="page-item disabled">
+                            <span class="page-link">
+                                ...
+                            </span>
+                        </li>
+                    
+
+                    <!-- Enquanto a pagina atual é menor o que máximo.... exibe o próximo -->
+                    
+                        
+                        <li class="page-item">
+                          <a class="page-link" href='/jurisprudencia/pesquisar?acao=Executa&amp;offset=10'><span class="glyphicon glyphicon-forward"></span></a>
+                        </li>
+                    
+
+                    
+                        <!-- Último -->
+                        
+                        <li class="page-item">
+                          <a href="/jurisprudencia/pesquisar?acao=Executa&amp;offset=1370" class="page-link pn prev" tabindex="-1"><span class="glyphicon glyphicon-fast-forward"></span></a>
+                        </li>
+                    
+
+                </ul>
+            </nav>
+
+            <br/>
+
+            
+
+                <form action="pesquisar" class="form-group">
+                    <div class="col-md-5">
+                        <input type="submit" value="<< Pesquisa Avançada" class="btn btn-info"/>
+                        <input type="hidden" name="acao" value="Pesquisar">
+                    </div>
+                </form>
+
+            
+
+        
+
+
+
+
+  </body>
+
+
+</html>
