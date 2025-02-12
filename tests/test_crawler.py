@@ -20,3 +20,6 @@ class TestBuscadorTceSp(TestCase):
             html_obtido = self.instancia_crawler._obtem_pag_jurisprudencia(self.url_busca)
             self.assertEqual(self.pagina_resultado_busca, html_obtido, "Pagina diferente da esperada.")
             self.assertEqual(mock_get.call_count, 1, "O numero de chamada é diferente do esperado.")
+
+# Comando para rodar o teste
+# python3 -m unittest tests.test_crawler
